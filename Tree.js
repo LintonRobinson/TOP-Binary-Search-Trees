@@ -10,42 +10,44 @@ class Tree {
 
    
    
-    buildTreeRecursive(array,start,end) {
-        // console.log('This is the passed array',array)
-        
-        // console.log('This is the start',start)
-        // console.log('This is the end',end)
-
-        if (start > end) return null
-        
-                 
-        
-        
-        const middleOfArray = start + Math.floor((end - start) / 2);
-        //console.log('This is the middle',middleOfArray)
-        
-        const root = new Node(array[middleOfArray])
-        //console.log('This is the root',array[middleOfArray])
-
-        //console.log('Running left')
-        root.leftChild = this.buildTreeRecursive(array, start, (middleOfArray - 1));
-        //console.log('Running right')
-        //console.log('Root of right',array[middleOfArray])
-        root.rightChild = this.buildTreeRecursive(array, (middleOfArray + 1),  end);
-        
-        // console.log('This is the root', root)
-        return root
-
-
-    };
+    
 
     buildTree(array) {
         // Converting to set, back to array removes duplicate elements
         const arrayToSet = new Set(array);
         const sanitizedArray = Array.from(arrayToSet);
         const sortedAndsanitizedArray = mergeSort(sanitizedArray); 
-        this.root = this.buildTreeRecursive(sortedAndsanitizedArray,0,sortedAndsanitizedArray.length - 1);
         
+        
+        
+        
+        function buildTreeRecursive(array,start,end) {
+            // console.log('This is the passed array',array)
+            
+            // console.log('This is the start',start)
+            // console.log('This is the end',end)
+
+            if (start > end) return null
+            
+            const middleOfArray = start + Math.floor((end - start) / 2);
+            //console.log('This is the middle',middleOfArray)
+            
+            const root = new Node(array[middleOfArray])
+            //console.log('This is the root',array[middleOfArray])
+
+            //console.log('Running left')
+            root.leftChild = this.buildTreeRecursive(array, start, (middleOfArray - 1));
+            //console.log('Running right')
+            //console.log('Root of right',array[middleOfArray])
+            root.rightChild = this.buildTreeRecursive(array, (middleOfArray + 1),  end);
+            
+            // console.log('This is the root', root)
+            return root
+
+
+        };
+        
+        this.root = buildTreeRecursive(sortedAndsanitizedArray,0,sortedAndsanitizedArray.length - 1);
 
     };
 
@@ -115,10 +117,13 @@ class Tree {
 
         };
         
-
         this.root = deleteItemRecursive(this.root,value);
+
         
-    }
+        
+    };
+
+
 };
 
 const prettyPrint = (node, prefix = '', isLeft = true) => {
