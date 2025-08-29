@@ -36,17 +36,17 @@ class Tree {
             //console.log('This is the root',array[middleOfArray])
 
             //console.log('Running left')
-            root.leftChild = this.buildTreeRecursive(array, start, (middleOfArray - 1));
+            root.leftChild = buildTreeRecursive(array, start, (middleOfArray - 1));
             //console.log('Running right')
             //console.log('Root of right',array[middleOfArray])
-            root.rightChild = this.buildTreeRecursive(array, (middleOfArray + 1),  end);
+            root.rightChild = buildTreeRecursive(array, (middleOfArray + 1),  end);
             
             // console.log('This is the root', root)
             return root
 
 
         };
-        
+
         this.root = buildTreeRecursive(sortedAndsanitizedArray,0,sortedAndsanitizedArray.length - 1);
 
     };
@@ -123,6 +123,21 @@ class Tree {
         
     };
 
+    find(value) {
+        let root = this.root; 
+
+        while (root.data !== value) {
+            if (value < root.leftChild.data) {
+                root = root.leftChild;
+            } else if (value > root.leftChild.data) {
+                root = root.rightChild;
+            };
+        
+        };  
+        
+        return root;
+    }
+
 
 };
 
@@ -157,6 +172,7 @@ console.log('Added 37');
 prettyPrint(exampleTree.root)
 
 exampleTree.deleteItem(3);
+console.log('This is what was found',exampleTree.find(5))
 
 
 console.log('Deleted 1');
