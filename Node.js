@@ -1,8 +1,8 @@
 class Node {
-    constructor() {
-        this.data = null;
-        this.leftChildren = null; 
-        this.rightChildren = null;
+    constructor(data) {
+        this.data = data;
+        this.leftChild = null; 
+        this.rightChild = null;
     };
 };
 

@@ -1,4 +1,5 @@
 import mergeSort from "./mergeSort.js";
+import Node from "./Node.js";
 
 class Tree {
     
@@ -7,22 +8,157 @@ class Tree {
         this.root = null;
     };
 
-    buildTree(array) {
-        // Converting to set, back to array removes duplicate elements
-        const arrayToSet = new Set(array);
-        const sanitizedArray = Array.from(arrayToSet);
-        const sortedArray = mergeSort(sanitizedArray);         
-        return sortedArray
+   
+   
+    buildTreeRecursive(array,start,end) {
+        // console.log('This is the passed array',array)
+        
+        // console.log('This is the start',start)
+        // console.log('This is the end',end)
+
+        if (start > end) return null
+        
+                 
+        
+        
+        const middleOfArray = start + Math.floor((end - start) / 2);
+        //console.log('This is the middle',middleOfArray)
+        
+        const root = new Node(array[middleOfArray])
+        //console.log('This is the root',array[middleOfArray])
+
+        //console.log('Running left')
+        root.leftChild = this.buildTreeRecursive(array, start, (middleOfArray - 1));
+        //console.log('Running right')
+        //console.log('Root of right',array[middleOfArray])
+        root.rightChild = this.buildTreeRecursive(array, (middleOfArray + 1),  end);
+        
+        // console.log('This is the root', root)
+        return root
 
 
     };
 
-    
+    buildTree(array) {
+        // Converting to set, back to array removes duplicate elements
+        const arrayToSet = new Set(array);
+        const sanitizedArray = Array.from(arrayToSet);
+        const sortedAndsanitizedArray = mergeSort(sanitizedArray); 
+        this.root = this.buildTreeRecursive(sortedAndsanitizedArray,0,sortedAndsanitizedArray.length - 1);
+        
 
+    };
+
+    insert(value) {
+        function insertRecursive(root, value) {
+            console.log('Running Ya Mama');
+            if (root === null) {
+                console.log('Base case', value)
+                return new Node(value);
+            }
+
+            if (value === root.data) return root;
+
+            if (value < root.data) {
+                root.leftChild = insertRecursive(root.leftChild,value);
+            } else if (value > root.data) {
+                root.rightChild = insertRecursive(root.rightChild,value);
+            }
+
+            return root;
+        }
+
+        console.log('Running');
+        insertRecursive(this.root,value);
+
+
+    }
+
+    deleteItem(value) {
+        
+        function getSuccessor(currentNode) {
+            // Reassight root to roots right child 
+            currentNode = currentNode.rightChild
+            // Iterate until you reach the left most node
+            while (currentNode.leftChild !== null && currentNode.rightChild !== null) {
+                currentNode = currentNode.leftChild;
+            };
+
+            return currentNode;
+        };
+
+        
+
+        function deleteItemRecursive(root,value) {
+            // If the passed root is null, return null
+            if (root === null) return root;
+            // Search subtrees for node with value to delete 
+            if (value < root.data) { // If the root to be deleted' value is less than the current roots left child, search left subtree for value and assign the returned root to left child
+                root.leftChild = deleteItemRecursive(root.leftChild,value);
+            } else if (value > root.data) { // If the root to be deleted' value is greated than the current roots left child, this roots left child is equal to the result of recursive right calls
+                root.leftChild = deleteItemRecursive(root.rightChild,value);
+            } else {
+                if (root.leftChild === null) {
+                    return root.rightChild;
+                };
+                
+                if (root.rightChild === null) {
+                    return root.leftChild;
+                };
+                    
+                const successorNode = getSuccessor(root);
+                root.data = successorNode.data;
+                root.rightChild = deleteItemRecursive(root.rightChild, successorNode.data);
+            };
+
+            return root;
+
+        };
+        
+
+        this.root = deleteItemRecursive(this.root,value);
+        
+    }
+};
+
+const prettyPrint = (node, prefix = '', isLeft = true) => {
+  if (node === null) {
+    return;
+  }
+  if (node.rightChild !== null) {
+    prettyPrint(node.rightChild, `${prefix}${isLeft ? '│   ' : '    '}`, false);
+  }
+  console.log(`${prefix}${isLeft ? '└── ' : '┌── '}${node.data}`);
+  if (node.leftChild !== null) {
+    prettyPrint(node.leftChild, `${prefix}${isLeft ? '    ' : '│   '}`, true);
+  }
+
+  
 
 };
 
-
 const exampleTree = new Tree();
-console.log(exampleTree.buildTree([1,7,4,23,8,9,4,3,5,7,9,67,6345,324,1,7]));
+exampleTree.buildTree([1,2,3,4,5]);
+console.log('Should be the root', exampleTree.root);
+exampleTree.insert(37)
+exampleTree.insert(0)
+
+console.log('Added 37');
+// Need to log the root after inserted number
+
+
+
+
+prettyPrint(exampleTree.root)
+
+exampleTree.deleteItem(3);
+
+
+console.log('Deleted 1');
+prettyPrint(exampleTree.root);
+
+
+
+
+
 
