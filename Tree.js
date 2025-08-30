@@ -54,7 +54,6 @@ class Tree {
     insert(value) {
         function insertRecursive(root, value) {
             if (root === null) {
-                console.log('Base case', value)
                 return new Node(value);
             }
 
@@ -154,6 +153,36 @@ class Tree {
             if (node.rightChild) queue.push(node.rightChild);
         }
     }
+
+    levelOrderForEach(callback) {
+        if (typeof callback !== 'function') {
+            throw new Error("A callback function is required");
+        } 
+        if (!this.root) return;
+       
+        const queue = [this.root];
+        let head = 0;
+
+        function recursiveLevelOrderForEach() {
+            //console.log('this is head',head)
+            
+            if (head >= queue.length) {
+                console.log('base case reached')
+                return
+            } 
+            const node = queue[head++];
+            callback(node);
+            if (node.leftChild) queue.push(node.leftChild);
+            if (node.rightChild) queue.push(node.rightChild);
+            //console.log('this is queue after pushes',queue)
+            //console.log('this is queue len after pushes',queue.length)
+            recursiveLevelOrderForEach()
+
+        }
+        recursiveLevelOrderForEach()
+        
+        
+    }
 };
 
 const prettyPrint = (node, prefix = '', isLeft = true) => {
@@ -195,9 +224,9 @@ exampleTree.deleteItem(3);
 //console.log('Deleted 3');
 prettyPrint(exampleTree.root);
 
-exampleTree.iterationLevelOrderForEach(logEachItem)
+//exampleTree.iterationLevelOrderForEach(logEachItem)
 
-
+exampleTree.levelOrderForEach(logEachItem)
 
 
 
