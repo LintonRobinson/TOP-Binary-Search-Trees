@@ -53,7 +53,6 @@ class Tree {
 
     insert(value) {
         function insertRecursive(root, value) {
-            console.log('Running Ya Mama');
             if (root === null) {
                 console.log('Base case', value)
                 return new Node(value);
@@ -138,7 +137,23 @@ class Tree {
         return root;
     }
 
+    iterationLevelOrderForEach(callback) {
+        if (typeof callback !== 'function') {
+            throw new Error("A callback function is required");
+        }
+        if (!this.root) return;
 
+        const queue = [this.root];
+        let head = 0;
+
+        while (head < queue.length) {
+            const node = queue[head++];
+            callback(node);
+
+            if (node.leftChild) queue.push(node.leftChild);
+            if (node.rightChild) queue.push(node.rightChild);
+        }
+    }
 };
 
 const prettyPrint = (node, prefix = '', isLeft = true) => {
@@ -157,13 +172,15 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
 
 };
 
+
+
 const exampleTree = new Tree();
 exampleTree.buildTree([1,2,3,4,5]);
-console.log('Should be the root', exampleTree.root);
+//console.log('Should be the root', exampleTree.root);
 exampleTree.insert(37)
 exampleTree.insert(0)
 
-console.log('Added 37');
+//console.log('Added 37');
 // Need to log the root after inserted number
 
 
@@ -172,14 +189,19 @@ console.log('Added 37');
 prettyPrint(exampleTree.root)
 
 exampleTree.deleteItem(3);
-console.log('This is what was found',exampleTree.find(5))
+//console.log('This is what was found',exampleTree.find(5))
 
 
-console.log('Deleted 1');
+//console.log('Deleted 3');
 prettyPrint(exampleTree.root);
 
+exampleTree.iterationLevelOrderForEach(logEachItem)
 
 
 
 
 
+
+function logEachItem(item) {
+    console.log(item.data);
+}
