@@ -246,6 +246,37 @@ class Tree {
         traverse(this.root,callback);
             
     } 
+
+    height(value) {
+        // When you hit a leaf that points to null, on the return base reset the value and iterate. if when the roots value matches 
+        
+        let heightTotal = 0;
+        
+
+        function heightRecursive(root,heightCount) {
+            const start = this.find(value);
+            if (!start) return null;
+            
+            if (root.leftChild) {
+            
+                heightRecursive(root.leftChild,heightCount + 1);
+            }
+            if (root.rightChild) {
+                heightRecursive(root.rightChild,heightCount + 1);
+            };
+            
+            if (!root.leftChild && !root.rightChild) {
+                if (heightCount > heightTotal) heightTotal = heightCount;
+                return;
+            }
+            
+        }
+
+        heightRecursive(this.find(value),0)
+        return heightTotal
+        
+    } 
+
         
         
 };
@@ -273,6 +304,7 @@ const exampleTree = new Tree();
 exampleTree.buildTree([1,2,3,4,5,6,7,8,9]);
 //console.log('Should be the root', exampleTree.root);
 exampleTree.insert(37)
+exampleTree.insert(47)
 exampleTree.insert(0)
 
 //console.log('Added 37');
@@ -293,6 +325,8 @@ prettyPrint(exampleTree.root);
 //exampleTree.iterationLevelOrderForEach(logEachItem)
 
 exampleTree.inOrderForEach(logEachItem)
+
+console.log(exampleTree.height(5));
 
 
 
