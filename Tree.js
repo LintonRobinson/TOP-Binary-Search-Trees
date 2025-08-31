@@ -183,7 +183,73 @@ class Tree {
         
         
     }
+    
+    preOrderForEach(callback) {
+            
+            
+        if (typeof callback !== 'function') {
+            throw new Error("A callback function is required");
+        } 
+        if (!this.root) return;
+    
+    
+        function traverse(root,callback) {
+            if (!root) return
+            callback(root)
+            traverse(root.leftChild,callback)
+            traverse(root.rightChild,callback)
+
+        }
+        
+        traverse(this.root,callback)
+            
+    } 
+
+    postOrderForEach(callback) {
+            
+            
+        if (typeof callback !== 'function') {
+            throw new Error("A callback function is required");
+        } 
+        if (!this.root) return;
+    
+    
+        function traverse(root,callback) {
+            if (!root) return 
+            traverse(root.leftChild,callback)
+            traverse(root.rightChild,callback)
+            callback(root)
+
+        }
+        
+        traverse(this.root,callback)
+            
+    } 
+
+    inOrderForEach(callback) {
+            
+            
+        if (typeof callback !== 'function') {
+            throw new Error("A callback function is required");
+        } 
+        if (!this.root) return;
+    
+    
+        function traverse(root,callback) {
+            if (!root) return 
+            traverse(root.leftChild,callback)
+            callback(root);
+            traverse(root.rightChild,callback)
+            
+        }
+        
+        traverse(this.root,callback);
+            
+    } 
+        
+        
 };
+
 
 const prettyPrint = (node, prefix = '', isLeft = true) => {
   if (node === null) {
@@ -204,7 +270,7 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
 
 
 const exampleTree = new Tree();
-exampleTree.buildTree([1,2,3,4,5]);
+exampleTree.buildTree([1,2,3,4,5,6,7,8,9]);
 //console.log('Should be the root', exampleTree.root);
 exampleTree.insert(37)
 exampleTree.insert(0)
@@ -215,9 +281,9 @@ exampleTree.insert(0)
 
 
 
-prettyPrint(exampleTree.root)
+//prettyPrint(exampleTree.root)
 
-exampleTree.deleteItem(3);
+//exampleTree.deleteItem(3);
 //console.log('This is what was found',exampleTree.find(5))
 
 
@@ -226,7 +292,7 @@ prettyPrint(exampleTree.root);
 
 //exampleTree.iterationLevelOrderForEach(logEachItem)
 
-exampleTree.levelOrderForEach(logEachItem)
+exampleTree.inOrderForEach(logEachItem)
 
 
 
