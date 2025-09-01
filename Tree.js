@@ -122,17 +122,20 @@ class Tree {
     };
 
     find(value) {
+        
         let root = this.root; 
 
         while (root.data !== value) {
-            if (value < root.leftChild.data) {
+            
+            if (value < root.data) {
                 root = root.leftChild;
-            } else if (value > root.leftChild.data) {
+                if (!root) return null;
+            } else if (value > root.data) {
                 root = root.rightChild;
+                if (!root) return null;
             };
         
         };  
-        
         return root;
     }
 
@@ -277,6 +280,23 @@ class Tree {
         
     } 
 
+    depth(value) {
+        const start = this.find(value);
+        if (!start) return null;
+        let root = this.root; 
+        let depth = 0;
+        while (root.data !== value) {
+            if (value < root.data) {
+                root = root.leftChild;
+                depth++;
+            } else if (value > root.data) {
+                root = root.rightChild;
+                depth++;
+            };
+        };  
+        return depth;
+    }
+
         
         
 };
@@ -316,7 +336,7 @@ exampleTree.insert(0)
 //prettyPrint(exampleTree.root)
 
 //exampleTree.deleteItem(3);
-//console.log('This is what was found',exampleTree.find(5))
+console.log('This is what was found',exampleTree.find(47))
 
 
 //console.log('Deleted 3');
@@ -324,9 +344,11 @@ prettyPrint(exampleTree.root);
 
 //exampleTree.iterationLevelOrderForEach(logEachItem)
 
-exampleTree.inOrderForEach(logEachItem)
+//exampleTree.inOrderForEach(logEachItem)
 
-console.log(exampleTree.height(5));
+//console.log(exampleTree.height(5));
+
+//console.log('Depth',exampleTree.depth(0));
 
 
 
