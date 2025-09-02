@@ -239,11 +239,10 @@ class Tree {
     
     
         function traverse(root,callback) {
-            if (!root) return 
-            traverse(root.leftChild,callback)
+            if (!root) return;
+            traverse(root.leftChild,callback);
             callback(root);
-            traverse(root.rightChild,callback)
-            
+            traverse(root.rightChild,callback);
         }
         
         traverse(this.root,callback);
@@ -252,16 +251,15 @@ class Tree {
 
     height(value) {
         // When you hit a leaf that points to null, on the return base reset the value and iterate. if when the roots value matches 
-        
+        const start = this.find(value);
+            if (!start) return null;
         let heightTotal = 0;
         
 
         function heightRecursive(root,heightCount) {
-            const start = this.find(value);
-            if (!start) return null;
+            
             
             if (root.leftChild) {
-            
                 heightRecursive(root.leftChild,heightCount + 1);
             }
             if (root.rightChild) {
@@ -297,6 +295,74 @@ class Tree {
         return depth;
     }
 
+    isBalanced() {
+        if (!this.root) return false;
+        if (!this.root.leftChild && !this.root.rightChild) return null;
+        let isBalanced;
+        let unBalanced;
+        
+        const checkNodeBalance = (node) => {
+            console.log('Passed node',node)
+            let leftChildHeight = 0;
+            let rightChildHeight = 0;
+
+            if (node.leftChild) leftChildHeight = this.height(node.leftChild.data);
+            
+
+            console.log('leftChildHeight',leftChildHeight)
+
+            if (node.rightChild) rightChildHeight = this.height(node.rightChild.data);
+            
+        
+
+
+            let treeHeightDifference = Math.abs(leftChildHeight - rightChildHeight);
+
+
+            if (treeHeightDifference >= 2) unBalanced = true;
+            if (treeHeightDifference < 2) isBalanced = true;
+            
+        
+        }
+
+        this.inOrderForEach(checkNodeBalance) 
+
+        if (unBalanced) {
+            return false;
+        } else if (isBalanced) {
+            return true;
+        } else {
+            return null;
+        }
+        
+    }
+
+    isBalancedRecursion() {
+        if (!this.root) return true;
+        
+        const checkNodeBalance = (node) => {
+            
+            if(!node) return 0;
+
+            const leftChildHeight = checkNodeBalance(node.leftChild)
+            if (leftChildHeight === -1) return -1;
+            
+
+            const rightChildHeight = checkNodeBalance(node.rightChild)
+            if (rightChildHeight === -1) return -1;
+
+    
+            // Check gap 
+            if (Math.abs(leftChildHeight - rightChildHeight) > 1) return -1;
+            
+            // Return 1 plus highest sub tree
+            return 1 + Math.max(leftChildHeight,rightChildHeight);
+            
+        }
+        return checkNodeBalance(this.root) !== -1;
+        
+    }
+
         
         
 };
@@ -325,7 +391,7 @@ exampleTree.buildTree([1,2,3,4,5,6,7,8,9]);
 //console.log('Should be the root', exampleTree.root);
 exampleTree.insert(37)
 exampleTree.insert(47)
-exampleTree.insert(0)
+//exampleTree.insert(0)
 
 //console.log('Added 37');
 // Need to log the root after inserted number
@@ -336,11 +402,13 @@ exampleTree.insert(0)
 //prettyPrint(exampleTree.root)
 
 //exampleTree.deleteItem(3);
-console.log('This is what was found',exampleTree.find(47))
+//console.log('This is what was found',exampleTree.find(47))
 
 
 //console.log('Deleted 3');
 prettyPrint(exampleTree.root);
+
+console.log('Is this tree balanced',exampleTree.isBalancedRecursion())
 
 //exampleTree.iterationLevelOrderForEach(logEachItem)
 
@@ -353,6 +421,6 @@ prettyPrint(exampleTree.root);
 
 
 
-function logEachItem(item) {
-    console.log(item.data);
+function logEachItem(node) {
+    console.log(node.data);
 }
