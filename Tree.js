@@ -8,10 +8,6 @@ class Tree {
         this.root = null;
     };
 
-   
-   
-    
-
     buildTree(array) {
         // Converting to set, back to array removes duplicate elements
         const arrayToSet = new Set(array);
@@ -68,14 +64,12 @@ class Tree {
             return root;
         }
 
-        console.log('Running');
         insertRecursive(this.root,value);
 
 
     }
 
-    deleteItem(value) {
-        
+    deleteItem(value) { 
         function getSuccessor(currentNode) {
             // Reassight root to roots right child 
             currentNode = currentNode.rightChild
@@ -124,9 +118,7 @@ class Tree {
     find(value) {
         
         let root = this.root; 
-
         while (root.data !== value) {
-            
             if (value < root.data) {
                 root = root.leftChild;
                 if (!root) return null;
@@ -134,7 +126,6 @@ class Tree {
                 root = root.rightChild;
                 if (!root) return null;
             };
-        
         };  
         return root;
     }
@@ -154,7 +145,7 @@ class Tree {
 
             if (node.leftChild) queue.push(node.leftChild);
             if (node.rightChild) queue.push(node.rightChild);
-        }
+        };
     }
 
     levelOrderForEach(callback) {
@@ -363,6 +354,12 @@ class Tree {
         
     }
 
+    rebalance() {
+        const newTreeArray = [];
+        this.inOrderForEach(node => newTreeArray.push(node.data))
+        this.buildTree(newTreeArray)
+    }
+
         
         
 };
@@ -409,6 +406,11 @@ exampleTree.insert(47)
 prettyPrint(exampleTree.root);
 
 console.log('Is this tree balanced',exampleTree.isBalancedRecursion())
+
+exampleTree.rebalance();
+
+prettyPrint(exampleTree.root);
+
 
 //exampleTree.iterationLevelOrderForEach(logEachItem)
 
